@@ -18,9 +18,14 @@ public class Bot : MonoBehaviour
     {
         agent.SetDestination(location);
     }
-    
+     
+    void Flee(Vector3 location)
+    {
+        Vector3 fleeVector = location - this.transform.position;
+        agent.SetDestination(this.transform.position - fleeVector);
+    }
     void Update()
     {
-        Seek(target.transform.position);
+        Flee(target.transform.position);
     }
 }
