@@ -79,9 +79,30 @@ public class Bot : MonoBehaviour
 
     }
 
+    void Hide()
+    {
+        float dist = Mathf.Infinity;
+        Vector3 chosenSpot = Vector3.zero;
+
+        for(int i = 0; i < world.Instance.GetHidingSpots().Length; i++)
+        {
+            Vector3 hiderDir = world.Instance.GetHidingSpots()[i].transform.position - target.transform.position;
+            Vector3 hidePos = world.Instance.GetHidingSpots()[i].transform.position + hiderDir.normalized * 10;
+
+            if (Vector3.Distance(this.transform.position, hidePos)< dist)
+            {
+                chosenSpot = hidePos;
+                dist = Vector3.Distance(this.transform.position, hidePos);
+            }
+
+        }
+
+
+        Seek(chosenSpot);
+    }
     void Update()
     {
         // Pursue();
-        wander();
+        Hide();
     }
 }
