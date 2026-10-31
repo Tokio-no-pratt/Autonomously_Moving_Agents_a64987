@@ -2,6 +2,7 @@
 using Mono.Cecil;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -182,13 +183,30 @@ public class Bot : MonoBehaviour
     {
         coolDown = false;
     }
+
+    bool TargetInRange()
+    {
+        if (Vector3.Distance(this.transform.position, target.transform.position) < 10)
+            return true;
+        return false;
+    }
     void Update()
     {
-        if (CanSeeTarget() && CanSeeMe())
+        if (!coolDown)
         {
-            CleverHide();
+            if (!TargetInRange())
+            {
+                Wander();
+            }
+            else if (CanSeeTarget() && CanSeeMe())
+            {
+                CleverHide();
+                coolDown = true;
+                Invoke("BehaviourCooldown", 5);
+            }
+            else
+                Pursue();
         }
-        else
-            Pursue();
+      
     }
 }
